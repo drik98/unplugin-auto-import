@@ -17,6 +17,7 @@ describe('search', () => {
     const data = await ctx.generateDTS('')
     expect(data).toContain('PageA')
     expect(data).toContain('PageB')
+    expect(data).toContain('pageAStories')
   })
 
   it('should dir excude work', async () => {
@@ -32,5 +33,21 @@ describe('search', () => {
     const data = await ctx.generateDTS('')
     expect(data).not.toContain('PageA')
     expect(data).not.toContain('PageB')
+  })
+
+  it('should exclude work', async () => {
+    const ctx = createContext({
+      dts: false,
+      dirs: [
+        'src/**',
+      ],
+      exclude: [
+        /\.stories\.[jt]sx?$/
+      ],
+    }, root)
+
+    await ctx.scanDirs()
+    const data = await ctx.generateDTS('')
+    expect(data).not.toContain('pageAStories')
   })
 })
